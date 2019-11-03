@@ -1,6 +1,7 @@
-# this software made by Andrian Latif 
-# you can modified or ditribute this program as you want
-# developer from https://sysadminroot.com
+# This software made by Andrian Latif 
+# become part of open source code
+# You can modify or redistribute this program any time you want and it's free 
+# even there are no restrictions at all
 # appkill version 1.0 
 
 # you can run
