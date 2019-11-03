@@ -6,6 +6,31 @@
 # even there are no restrictions at all
 # appkill version 1.0 
 
+# how to use this program?
+# * download from github
+# $ git clone https://github.com/ianirhabi/appkill.git
+
+# * move to appkill directory after clone from github
+# $ cd appkill
+
+# * make executable from terminal linux 
+# $sudo chmod +x appkill
+
+# * copy program to directory /usr/bin
+# $sudo cp appkill /usr/bin
+
+# * run program with command
+# $sudo appkill --help
+
+# * for start program 
+# $sudo appkill start
+
+# * for see version
+# $sudo appkill version
+
+# * for see help
+# $sudo appkill --help
+
 function Main() {
     #input aplikasi yang ingin di lihat aktifitasnya
     echo -n "Insert name of app you want to kill : " 
