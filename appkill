@@ -8,7 +8,7 @@
 
 function Main() {
     #input aplikasi yang di ingin di lihat aktifitasnya
-    echo -n "Insert name of app you want to see : " 
+    echo -n "Insert name of app you want to kill : " 
 
     #mengambil inputan dari echo
     read name_app
@@ -35,6 +35,7 @@ function Main() {
                 rm -rf $TEXT_READ
                 exit
             else
+                #mencari jumlah total aplikasi yang sedang running
                 COUNTNAMEAPPTOTAL=$(grep -c $name_app $DIR_LOCATION/$TEXT_READ)
                 echo "found ${COUNTNAMEAPPTOTAL} with $name_app name defined in ${file}"
                 echo "\*---------------------------------------------------------------*/"
@@ -47,6 +48,7 @@ function Main() {
                 read validate
                     if [[ $validate == "y" || $validate == "Y" ]]
                     then 
+                    # kill aplikasi jika lebih dari 1 atau hanya 1 saja yang running di proses dengan looping
                     for (( c=1; c<=${COUNTNAMEAPPTOTAL}; c++ ))
                         do  
                             #kill aplikasi nya
@@ -93,7 +95,7 @@ function Bypassvalid(){
         Main
     fi
 
-    # jalankan sebagai root system jika tidak makan akan exit
+    # jalankan sebagai root system jika tidak akan di exit programnya
     if [[ "$EUID" -ne 0 ]]; then
         echo "Sorry, you need to run this as root"
         exit
@@ -123,6 +125,9 @@ function Bypassvalid(){
     fi
 }
 
+function ALLAPP(){
+    ps -aux | less
+}
 #jika parameter kosong
 if [[ -z "$@" ]];
 then 
@@ -130,11 +135,14 @@ then
 elif [[ $@ == "--help" ]]; then
     echo "1) appkill start (start program)"
     echo "2) appkill version (see the version app)"
+    echo "3) appkill -a (see ALL process running)"
     exit
 elif [[ $@ == "start" ]]; then
     Bypassvalid
 elif [[ $@ == "version" ]]; then
     echo "appkill 1.0 (copy right by Andrian Latif 2019)"
+elif [[ $@ == "-a" ]]; then
+    ALLAPP
 else 
     echo "Cannot validate the parameter '$@'.... try with this command:  'appkill --help'"
 fi
