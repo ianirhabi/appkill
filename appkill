@@ -95,6 +95,12 @@ function Main() {
 }
 
 function Bypassvalid(){
+     # jalankan sebagai root system jika tidak akan di exit programnya
+    if [[ "$EUID" -ne 0 ]]; then
+        echo "Sorry, you need to run this as root"
+        exit
+    fi
+
     if grep -qs "14.04" /etc/os-release; then
         echo "Ubuntu 14.04 is too old and but it's ok"
         Main
@@ -119,12 +125,6 @@ function Bypassvalid(){
     if readlink /proc/$$/exe | grep -q "dash"; then
         echo "This script needs to be run with bash, not sh"
         Main
-    fi
-
-    # jalankan sebagai root system jika tidak akan di exit programnya
-    if [[ "$EUID" -ne 0 ]]; then
-        echo "Sorry, you need to run this as root"
-        exit
     fi
 
     if [[ ! -e /dev/net/tun ]]; then
