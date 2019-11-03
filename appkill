@@ -7,7 +7,7 @@
 # appkill version 1.0 
 
 function Main() {
-    #input aplikasi yang di ingin di lihat aktifitasnya
+    #input aplikasi yang ingin di lihat aktifitasnya
     echo -n "Insert name of app you want to kill : " 
 
     #mengambil inputan dari echo
@@ -44,7 +44,8 @@ function Main() {
                 echo "\*---------------------------------------------------------------*/"
                 echo "\*---------------------------------------------------------------*/"
                 rm -rf $TEXT_READ
-                echo -n "It's running, You want to kill it ? (Y/n) :"
+                echo ""
+                echo -n "'$name_app' is running, You want to kill it ? (Y/n) :"
                 read validate
                     if [[ $validate == "y" || $validate == "Y" ]]
                     then 
