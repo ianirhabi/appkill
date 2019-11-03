@@ -4,11 +4,20 @@
 # even there are no restrictions at all
 # appkill version 1.0 
 
-# you can run
+* download from github
+$ git clone https://github.com/ianirhabi/appkill.git
+
+* make executable from terminal linux 
+$sudo chmod +x appkill
+
+* run program with command
 $sudo appkill --help
 
-# for start program 
+* for start program 
 $sudo appkill start
 
-# for see version
+* for see version
 $sudo appkill version
+
+* for see help
+$sudo appkill --help
