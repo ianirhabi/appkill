@@ -10,6 +10,9 @@ $ git clone https://github.com/ianirhabi/appkill.git
 * make executable from terminal linux 
 $sudo chmod +x appkill
 
+* copy program to directory /usr/bin
+$sudo cp appkill /usr/bin
+
 * run program with command
 $sudo appkill --help
 
