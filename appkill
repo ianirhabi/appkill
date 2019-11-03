@@ -1,0 +1,140 @@
+#!/bin/bash
+# this software made by Andrian Latif you can modified or ditribute this program as you want
+# developer from sysadminroot.com
+# 2-november-2019
+
+
+#jika parameter kosong
+if [[ -z "$@" ]]
+then 
+    echo "You should to give the parameter on command appkill check with 'appkill --help' "
+elif [[ $@ == "--help" ]]; then
+    echo "1) appkill start (start program)"
+    echo "2) appkill version (see the version app)"
+    exit
+elif [ $@ == "start" ]; then
+    SAY_PROGRAM;
+elif [[ $@ == "version" ]]; then
+    echo "appkill 1.0 (copy right by Andrian Latif 2019)"
+else 
+    echo "Cannot validate the parameter '$@'.... try with this command:  'appkill --help'"
+fi
+
+function SAY_PROGRAM(){
+     if grep -qs "14.04" /etc/os-release; then
+        echo "Ubuntu 14.04 is too old and not supported"
+        exit
+    fi
+
+    if grep -qs "jessie" /etc/os-release; then
+        echo "Debian 8 is too old and not supported"
+        exit
+    fi
+
+    if grep -qs "CentOS release 6" /etc/redhat-release; then
+        echo "CentOS 6 is too old and not supported"
+        exit
+    fi
+
+    if grep -qs "Ubuntu 16.04" /etc/os-release; then
+        echo 'Ubuntu 16.04 is no longer supported in the current version of openvpn-install
+    Use an older version if Ubuntu 16.04 support is needed: '
+        exit
+    fi
+
+    # Detect Debian users running the script with "sh" instead of bash
+    if readlink /proc/$$/exe | grep -q "dash"; then
+        echo "This script needs to be run with bash, not sh"
+        exit
+    fi
+
+    # jalankan sebagai root system jika tidak makan akan exit
+    if [[ "$EUID" -ne 0 ]]; then
+        echo "Sorry, you need to run this as root"
+        exit
+    fi
+
+    if [[ ! -e /dev/net/tun ]]; then
+        echo "The TUN device is not available
+    You need to enable TUN before running this script"
+        exit
+    fi
+
+    if ! iptables -t nat -nL &>/dev/null; then
+        echo "Unable to initialize the iptables/netfilter NAT table, setup can't continue.
+    If you are a LowEndSpirit customer, see here: https://git.io/nfLES
+    If you are getting this message on any other provider, ask them for support."
+        exit
+    fi
+
+    if [[ -e /etc/debian_version ]]; then
+        os=$(cat /etc/debian_version)
+        group_name="nogroup"
+        echo "Your OS running on "$os "..."
+    elif [[ -e /etc/centos-release || -e /etc/redhat-release ]]; then
+        os=$(cat /etc/centos_release)
+        group_name="nobody"
+        echo "Your OS running on "$os "..."
+    else
+        echo "Looks like you aren't running this installer on Debian, Ubuntu or CentOS"
+        exit
+    fi
+
+    #input aplikasi yang di ingin di lihat aktifitasnya
+    echo -n "Insert name of app you want to see : " 
+
+    #mengambil inputan dari echo
+    read name_app
+
+    DIR_LOCATION=$(pwd)
+    TEXT_READ="readtxt.txt"
+
+    # PERINTAH mengrep aplikasi yang sedang running di backround linux dan di masukan kedalam variabel INPUT_ACCEPT
+    INPUT_ACCEPT=$(ps -eo pid,user,stat,comm | grep $name_app)
+
+    # PERINTAH UNTUK MENULIS TEXT KE DALAM FILE
+    echo $INPUT_ACCEPT >> $TEXT_READ
+
+    for file in $DIR_LOCATION/$TEXT_READ
+    do
+        #echo "debug ${file}"
+        if [ "${file}" == $DIR_LOCATION/$TEXT_READ ]
+        then
+            # validasi terleih dahulu jika variabelnya kosong maka tidak ada aktifitas program yang jalan dan program tidak akan di lanjutkan
+            if [ -z "$INPUT_ACCEPT" ]
+            then
+                echo "\ Program is not running"
+                echo "exit"
+                rm -rf $TEXT_READ
+                exit
+            else
+                COUNTNAMEAPPTOTAL=$(grep -c $name_app $DIR_LOCATION/$TEXT_READ)
+                echo "found ${COUNTNAMEAPPTOTAL} with $name_app name defined in ${file}"
+                echo "\*---------------------------------------------------------------*/"
+                echo "\*---------------------------------------------------------------*/"
+                cat $TEXT_READ
+                echo "\*---------------------------------------------------------------*/"
+                echo "\*---------------------------------------------------------------*/"
+                rm -rf $TEXT_READ
+                echo -n "It's running, You want to kill it ? (Y/n) :"
+                read validate
+                    if [[ $validate == "y" || $validate == "Y" ]]
+                    then 
+                    for (( c=1; c<=${COUNTNAMEAPPTOTAL}; c++ ))
+                        do  
+                            #kill aplikasi nya
+                            pkill $name_app
+                        done
+                        break
+                    else 
+                        echo "You choose " $validate
+                        echo "exit"
+                        break
+                    fi
+            fi    
+        else 
+            echo "wrong file directory I am sory ...."
+            break
+        fi
+    done
+}
