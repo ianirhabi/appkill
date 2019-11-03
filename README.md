@@ -7,6 +7,9 @@
 * download from github
 $ git clone https://github.com/ianirhabi/appkill.git
 
+* move to appkill directory after clone from github
+$ cd appkill
+
 * make executable from terminal linux 
 $sudo chmod +x appkill
 
