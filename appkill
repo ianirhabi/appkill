@@ -69,7 +69,7 @@ function Main() {
 }
 
 function Bypassvalid(){
-      if grep -qs "14.04" /etc/os-release; then
+    if grep -qs "14.04" /etc/os-release; then
         echo "Ubuntu 14.04 is too old and but it's ok"
         Main
     fi
@@ -128,21 +128,27 @@ function Bypassvalid(){
 function ALLAPP(){
     ps -aux | less
 }
+
 #jika parameter kosong
 if [[ -z "$@" ]];
 then 
     echo "You should to give the parameter on command appkill check with 'appkill --help' "
+
 elif [[ $@ == "--help" ]]; then
     echo "1) appkill start (start program)"
     echo "2) appkill version (see the version app)"
     echo "3) appkill -a (see ALL process running)"
     exit
+
 elif [[ $@ == "start" ]]; then
     Bypassvalid
+
 elif [[ $@ == "version" ]]; then
     echo "appkill 1.0 (copy right by Andrian Latif 2019)"
+
 elif [[ $@ == "-a" ]]; then
     ALLAPP
+
 else 
     echo "Cannot validate the parameter '$@'.... try with this command:  'appkill --help'"
 fi
